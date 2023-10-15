@@ -1,0 +1,70 @@
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import mongoose from "mongoose";
+import { v2 as cloudinary } from "cloudinary";
+import { ErrorMiddleware } from "./middleware/error";
+import userRouter from "./routes/user.route";
+import courseRouter from "./routes/course.route";
+import orderRouter from "./routes/order.route";
+import notificationRouter from "./routes/notification.route";
+import analyticsRouter from "./routes/analytics.route";
+import authRouter from "./routes/auth.route";
+import layoutRouter from "./routes/layout.route";
+
+const dotenv = require("dotenv");
+
+const app = express();
+
+dotenv.config();
+
+//body parser
+app.use(express.json({ limit: "50mb" }));
+
+//cors => cross origin resource sharing
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
+//cookie parser
+app.use(cookieParser());
+
+//connect to mongoose db
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URL).then((data: any) => {
+      console.log("Connected to MongoDB");
+    });
+  } catch (error: any) {
+    console.error("Error connecting to MongoDB", error);
+    setTimeout(connectDB, 3000);
+  }
+};
+
+//cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_SECRET_KEY,
+});
+
+//routes
+app.use("/v1/auth/", authRouter);
+app.use("/v1/users/", userRouter);
+app.use("/v1/courses/", courseRouter);
+app.use("/v1/orders/", orderRouter);
+app.use("/v1/notifications/", notificationRouter);
+app.use("/v1/analytics/", analyticsRouter);
+app.use("/v1/layout/", layoutRouter);
+
+//error middleware
+app.use(ErrorMiddleware);
+
+//connect to server
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}!`);
+  connectDB();
+});

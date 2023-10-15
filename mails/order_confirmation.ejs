@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation</title>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        height: 100vh;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ff3366;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        color: #000000;
+      }
+      .message,
+      .message-sm {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+        padding-top: 50px;
+      }
+      .message-sm > h1 {
+        text-align: center;
+        font-size: 25px;
+        font-weight: 600;
+      }
+      .course-info {
+        margin: auto;
+        padding: 20px 0;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 2px 2px 2px rgba(206, 197, 197, 0.1);
+        color: #000;
+      }
+      .course-info > h1 {
+        color: #23bd70;
+        font-size: 22px;
+        font-family: "Poppins", sans-serif;
+        font-weight: 500;
+        text-align: center;
+        padding: 0 !important;
+        margin-top: 0 !important;
+      }
+      .course-name {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .purchase-info {
+        font-size: 15px;
+      }
+      .total {
+        font-size: 18px;
+        text-align: center;
+        margin-top: 20px;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 100px;
+        color: #fff;
+      }
+      .flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1p solid #9999993f;
+      }
+      .flex h4 {
+        font-weight: 400;
+        margin-bottom: 5px;
+      }
+      .flex.lg {
+        width: 85%;
+        margin: auto;
+        border-bottom: none;
+      }
+      .first-td {
+        text-transform: uppercase;
+        color: #000000;
+        font-size: 16px;
+        padding: 5px 0;
+        width: 1%;
+        font-weight: 600 !important;
+      }
+      .second-td {
+        font-weight: 500 !important;
+        color: #000000;
+        font-size: 15px;
+      }
+      .title {
+        font-size: 16px !important;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td {
+        padding: 10px;
+        text-align: center;
+        width: 28.33%;
+      }
+      td.col-2 {
+        width: 100%;
+        text-align: left;
+        padding: 0;
+        margin: 0;
+      }
+      .m-auto {
+        width: 100%;
+        margin: auto;
+      }
+      .table-row {
+        width: 70%;
+        display: block;
+        margin: auto;
+        padding: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="message-sm">
+        <h1>M1LKY ELearning order is confirmed!</h1>
+        <p>And we're just excited as you are.</p>
+      </div>
+      <br />
+      <br />
+      <div class="course-info">
+        <h4 style="margin-left: 50px">Here's what you ordered:</h4>
+        <table style="border-bottom: 1px solid #0000002f">
+          <tr>
+            <td>Order #: <%= order._id %></td>
+            <td>Order Date: <%= order.date %></td>
+          </tr>
+        </table>
+        <table style="width: 90%; margin: auto; display: block">
+          <tr>
+            <td class="first-td">Item</td>
+            <td class="first-td">Quality</td>
+            <td class="first-td">Cost</td>
+          </tr>
+        </table>
+        <table style="width: 90%; margin: auto; display: block">
+          <tr>
+            <td class="second-td"><%= order.name %></td>
+            <td class="second-td">1</td>
+            <td class="second-td"><%= order.price %></td>
+          </tr>
+        </table>
+      </div>
+      <div class="footer">
+        <p>
+          If you have any questions, please don't hesitate to contact us at
+          <a href="mailto:levuhai2310@gmail.com">levuhai2310@gmail.com</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
