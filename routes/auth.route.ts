@@ -18,6 +18,6 @@ authRouter.post("/login", loginUser);
 authRouter.get("/logout", isAuthenticated, logoutUser);
 authRouter.get("/refresh-token", generateAccessToken);
 authRouter.get("/me", isAuthenticated, getUserInfo);
-authRouter.post("/social-auth", isAuthenticated, socialAuth);
+authRouter.post("/social-auth", socialAuth);
 
 export default authRouter;
