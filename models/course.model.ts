@@ -9,7 +9,7 @@ export interface IComment extends Document {
 
 interface IReview extends Document {
   user: IUser;
-  rating: number;
+  rating?: number;
   comment: string;
   commentReplies?: IComment[];
 }
