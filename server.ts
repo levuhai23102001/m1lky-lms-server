@@ -11,12 +11,16 @@ import notificationRouter from "./routes/notification.route";
 import analyticsRouter from "./routes/analytics.route";
 import authRouter from "./routes/auth.route";
 import layoutRouter from "./routes/layout.route";
+import http from "http";
+import { initSocketServer } from "./socketServer";
 
 const dotenv = require("dotenv");
 
 const app = express();
 
 dotenv.config();
+
+const server = http.createServer(app);
 
 //body parser
 app.use(express.json({ limit: "50mb" }));
@@ -62,9 +66,12 @@ app.use("/v1/layout/", layoutRouter);
 //error middleware
 app.use(ErrorMiddleware);
 
+//connect to socket.oi
+initSocketServer(server);
+
 //connect to server
 const PORT = process.env.PORT;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}!`);
   connectDB();
 });

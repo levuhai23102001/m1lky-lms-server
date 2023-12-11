@@ -94,7 +94,7 @@ export const getSingleCourse = CatchAsyncError(
         const course = await CourseModel.findById(courseId).select(
           "-courseData.videoUrl -courseData.suggestion -courseData.questions, -courseData.links"
         );
-        await redis.set(courseId, JSON.stringify(course), "EX", 604800); //7days
+        // await redis.set(courseId, JSON.stringify(course), "EX", 604800); //7days
         res.status(200).json({ success: true, course });
       }
     } catch (err: any) {
@@ -115,7 +115,7 @@ export const getAllCourses = CatchAsyncError(
         const courses = await CourseModel.find().select(
           "-courseData.videoUrl -courseData.suggestion -courseData.questions, -courseData.links"
         );
-        await redis.set("allCourses", JSON.stringify(courses));
+        // await redis.set("allCourses", JSON.stringify(courses));
         res.status(200).json({ success: true, courses });
       }
     } catch (err: any) {
@@ -230,6 +230,8 @@ export const addAnswer = CatchAsyncError(
       const newAnswer: any = {
         user: req.user,
         answer,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
       //add this answer to our this course
       question.questionReplies.push(newAnswer);
@@ -318,6 +320,8 @@ export const addReview = CatchAsyncError(
 
       await course?.save();
 
+      // await redis.set(courseId, JSON.stringify(course), "EX", 604800);
+
       //create notification
       await NotificationModel.create({
         user: req.user?._id,
@@ -357,6 +361,8 @@ export const addReplyToReview = CatchAsyncError(
       const replyData: any = {
         user: req.user,
         comment,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       if (!review.commentReplies) {
@@ -366,6 +372,8 @@ export const addReplyToReview = CatchAsyncError(
       review.commentReplies?.push(replyData);
 
       await course?.save();
+
+      // await redis.set(courseId, JSON.stringify(course), "EX", 604800);
 
       //create send mail
 
