@@ -134,13 +134,13 @@ export const newPayment = CatchAsyncError(
     try {
       const myPayment = await stripe.paymentIntents.create({
         amount: req.body.amount,
-        currency: "USD",
+        currency: "usd",
         metadata: {
           company: "M1LKY",
         },
-        // automatic_payment_method: {
-        //   enabled: true,
-        // },
+        automatic_payment_methods: {
+          enabled: true,
+        },
       });
 
       res

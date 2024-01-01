@@ -83,14 +83,14 @@ userSchema.methods.comparePassword = async function (
 //sign access token
 userSchema.methods.signAccessToken = function () {
   return jwt.sign({ id: this._id }, process.env.ACCESS_TOKEN || "", {
-    expiresIn: "5m",
+    expiresIn: "7d",
   });
 };
 
 //sign refresh token
 userSchema.methods.signRefreshToken = function () {
   return jwt.sign({ id: this._id }, process.env.REFRESH_TOKEN || "", {
-    expiresIn: "3d",
+    expiresIn: "30d",
   });
 };
 

@@ -11,6 +11,7 @@ import {
   getAllCourses,
   getCourseByUser,
   getSingleCourse,
+  searchCourse,
   updateCourse,
   uploadCourse,
 } from "../controllers/course.controller";
@@ -79,5 +80,7 @@ courseRouter.delete(
   deleteCourse
 );
 courseRouter.post("/generate-VdoCipherOTP", generateVideoUrl);
+
+courseRouter.get("/search", searchCourse);
 
 export default courseRouter;

@@ -112,11 +112,30 @@ export const getAllCourses = CatchAsyncError(
         const courses = JSON.parse(isCacheExist);
         res.status(200).json({ success: true, courses });
       } else {
-        const courses = await CourseModel.find().select(
-          "-courseData.videoUrl -courseData.suggestion -courseData.questions, -courseData.links"
-        );
+        const page = parseInt(req.query.page as string, 10) || 1; // Default to page 1 if not specified
+        const limit = (req.query.limit as any) || 10; // Set your desired limit per page
+        const skip = (page - 1) * limit;
+        const courses = await CourseModel.find()
+          .sort({ _id: -1 })
+          .select(
+            "-courseData.videoUrl -courseData.suggestion -courseData.questions, -courseData.links"
+          )
+          .skip(skip)
+          .limit(limit);
         // await redis.set("allCourses", JSON.stringify(courses));
-        res.status(200).json({ success: true, courses });
+        // Send the fetched courses as the response along with pagination metadata
+        const totalCourses = await CourseModel.countDocuments(); // Get total number of courses
+        const totalPages = Math.ceil(totalCourses / limit);
+
+        res.status(200).json({
+          success: true,
+          courses,
+          pagination: {
+            currentPage: page,
+            totalPages,
+            totalCourses,
+          },
+        });
       }
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 500));
@@ -376,6 +395,34 @@ export const addReplyToReview = CatchAsyncError(
       // await redis.set(courseId, JSON.stringify(course), "EX", 604800);
 
       //create send mail
+      if (req.user?._id === review.user._id) {
+        //create a notification
+        await NotificationModel.create({
+          user: req.user?._id,
+          title: "New Review Reply Received!",
+          message: `You have a new review reply in ${course.name}`,
+        });
+      } else {
+        const data = {
+          name: review.user.name,
+          title: course.name,
+        };
+
+        const html = await ejs.renderFile(
+          path.join(__dirname, "../mails/review_reply.ejs"),
+          data
+        );
+        try {
+          await sendMail({
+            email: review.user.email,
+            subject: "Review reply",
+            template: "review_reply.ejs",
+            data,
+          });
+        } catch (err: any) {
+          return next(new ErrorHandler(err.message, 500));
+        }
+      }
 
       res.status(200).json({
         success: true,
@@ -444,6 +491,47 @@ export const generateVideoUrl = CatchAsyncError(
       res.json(response.data);
     } catch (err: any) {
       return next(new ErrorHandler(err.message, 400));
+    }
+  }
+);
+
+//search course
+export const searchCourse = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const page = parseInt(req.query.page as string, 10) || 1;
+      const limit = parseInt(req.query.limit as string, 10) || 10;
+      const skip = (page - 1) * limit;
+      const searchParams = (req.query.title as string) || ""; // Assuming the search query parameter is 'title'
+
+      const searchQuery = {
+        // Define your search criteria based on your CourseModel schema
+        name: { $regex: new RegExp(searchParams, "i") },
+      };
+
+      const courses = await CourseModel.find(searchQuery)
+        .select(
+          "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+        )
+        .skip(skip)
+        .limit(limit);
+
+      // Fetch total courses count based on the search filter
+      const totalCourses = await CourseModel.countDocuments(searchQuery);
+
+      const totalPages = Math.ceil(totalCourses / limit);
+
+      res.status(200).json({
+        success: true,
+        courses,
+        pagination: {
+          currentPage: page,
+          totalPages,
+          totalCourses,
+        },
+      });
+    } catch (err: any) {
+      return next(new ErrorHandler(err.message, 500));
     }
   }
 );

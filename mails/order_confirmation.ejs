@@ -151,7 +151,7 @@
         <table style="width: 90%; margin: auto; display: block">
           <tr>
             <td class="first-td">Item</td>
-            <td class="first-td">Quality</td>
+            <td class="first-td">Quantity</td>
             <td class="first-td">Cost</td>
           </tr>
         </table>
@@ -159,7 +159,22 @@
           <tr>
             <td class="second-td"><%= order.name %></td>
             <td class="second-td">1</td>
-            <td class="second-td"><%= order.price %></td>
+            <td class="second-td">$<%= order.price %></td>
+          </tr>
+        </table>
+        <div
+          style="
+            width: 90%;
+            height: 1px;
+            background-color: #0000002f;
+            margin: auto;
+          "
+        ></div>
+        <table style="width: 90%; margin: auto; display: block">
+          <tr>
+            <td class="first-td">Total:</td>
+            <td class="first-td"></td>
+            <td class="first-td">$<%= order.price %></td>
           </tr>
         </table>
       </div>

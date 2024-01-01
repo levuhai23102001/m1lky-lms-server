@@ -204,13 +204,13 @@ export const generateAccessToken = CatchAsyncError(
       const accessToken = jwt.sign(
         { id: user._id },
         process.env.ACCESS_TOKEN as string,
-        { expiresIn: "5m" }
+        { expiresIn: "7d" }
       );
 
       const refreshToken = jwt.sign(
         { id: user._id },
         process.env.REFRESH_TOKEN as string,
-        { expiresIn: "3d" }
+        { expiresIn: "30d" }
       );
 
       req.user = user;
