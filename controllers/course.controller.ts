@@ -112,10 +112,17 @@ export const getAllCourses = CatchAsyncError(
         const courses = JSON.parse(isCacheExist);
         res.status(200).json({ success: true, courses });
       } else {
+        let query: any = {};
+
+        if (req.query.category) {
+          query = { categories: req.query.category };
+        }
+
         const page = parseInt(req.query.page as string, 10) || 1; // Default to page 1 if not specified
-        const limit = (req.query.limit as any) || 10; // Set your desired limit per page
+        const limit = req.query.limit as any;
+
         const skip = (page - 1) * limit;
-        const courses = await CourseModel.find()
+        const courses = await CourseModel.find(query)
           .sort({ _id: -1 })
           .select(
             "-courseData.videoUrl -courseData.suggestion -courseData.questions, -courseData.links"
@@ -124,7 +131,7 @@ export const getAllCourses = CatchAsyncError(
           .limit(limit);
         // await redis.set("allCourses", JSON.stringify(courses));
         // Send the fetched courses as the response along with pagination metadata
-        const totalCourses = await CourseModel.countDocuments(); // Get total number of courses
+        const totalCourses = await CourseModel.countDocuments(query); // Get total number of courses
         const totalPages = Math.ceil(totalCourses / limit);
 
         res.status(200).json({
@@ -502,11 +509,16 @@ export const searchCourse = CatchAsyncError(
       const page = parseInt(req.query.page as string, 10) || 1;
       const limit = parseInt(req.query.limit as string, 10) || 10;
       const skip = (page - 1) * limit;
-      const searchParams = (req.query.title as string) || ""; // Assuming the search query parameter is 'title'
-
+      const searchParams = (req.query.title as string) || "";
+      const decodedSearchParams = decodeURIComponent(searchParams);
       const searchQuery = {
         // Define your search criteria based on your CourseModel schema
-        name: { $regex: new RegExp(searchParams, "i") },
+        name: {
+          $regex: new RegExp(
+            decodedSearchParams.replace(/\s/g, "\\s*").split(" ").join("\\s*"),
+            "i"
+          ),
+        },
       };
 
       const courses = await CourseModel.find(searchQuery)
