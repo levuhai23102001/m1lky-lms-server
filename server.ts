@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
@@ -62,6 +62,14 @@ app.use("/v1/orders/", orderRouter);
 app.use("/v1/notifications/", notificationRouter);
 app.use("/v1/analytics/", analyticsRouter);
 app.use("/v1/layout/", layoutRouter);
+
+app.get("/", (req: Request, res: Response) => {
+  return res.send("Express Typescript on Vercel");
+});
+
+app.get("/ping", (req: Request, res: Response) => {
+  return res.send("pong 🏓");
+});
 
 //error middleware
 app.use(ErrorMiddleware);
