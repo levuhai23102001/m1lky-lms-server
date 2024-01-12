@@ -2,7 +2,11 @@
   "name": "m1lky-server",
   "version": "1.0.0",
   "description": "",
+  "type": "commonjs",
   "main": "build/server.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "nodemon build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
