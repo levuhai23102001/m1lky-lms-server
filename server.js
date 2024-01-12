@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const cloudinary_1 = require("cloudinary");
@@ -24,13 +25,10 @@ const server = http_1.default.createServer(app);
 //body parser
 app.use(express_1.default.json({ limit: "50mb" }));
 //cors => cross origin resource sharing
-app.use(function (req, res, next) {
-    //Enabling CORS
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
-    next();
-});
+app.use((0, cors_1.default)({
+    origin: ["https://m1lky-lms.vercel.app"],
+    credentials: true,
+}));
 //cookie parser
 app.use((0, cookie_parser_1.default)());
 //connect to mongoose db
