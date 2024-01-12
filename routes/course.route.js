@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const auth_1 = require("../middleware/auth");
+const course_controller_1 = require("../controllers/course.controller");
+const user_controller_1 = require("../controllers/user.controller");
+const courseRouter = express_1.default.Router();
+courseRouter.post("/create-course", user_controller_1.generateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRoles)("admin"), course_controller_1.uploadCourse);
+courseRouter.put("/update-course/:id", user_controller_1.generateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRoles)("admin"), course_controller_1.updateCourse);
+courseRouter.get("/get-course/:id", course_controller_1.getSingleCourse);
+courseRouter.get("/get-courses", course_controller_1.getAllCourses);
+courseRouter.get("/get-course-content/:id", user_controller_1.generateAccessToken, auth_1.isAuthenticated, course_controller_1.getCourseByUser);
+courseRouter.put("/add-question", user_controller_1.generateAccessToken, auth_1.isAuthenticated, course_controller_1.addQuestion);
+courseRouter.put("/add-answer", user_controller_1.generateAccessToken, auth_1.isAuthenticated, course_controller_1.addAnswer);
+courseRouter.put("/add-review/:id", user_controller_1.generateAccessToken, auth_1.isAuthenticated, course_controller_1.addReview);
+courseRouter.put("/add-reply", user_controller_1.generateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRoles)("admin"), course_controller_1.addReplyToReview);
+courseRouter.get("/get-all-courses", auth_1.isAuthenticated, user_controller_1.generateAccessToken, (0, auth_1.authorizeRoles)("admin"), course_controller_1.getAllCourseAdmin);
+courseRouter.delete("/delete-course/:id", user_controller_1.generateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRoles)("admin"), course_controller_1.deleteCourse);
+courseRouter.post("/generate-VdoCipherOTP", course_controller_1.generateVideoUrl);
+courseRouter.get("/search", course_controller_1.searchCourse);
+exports.default = courseRouter;
