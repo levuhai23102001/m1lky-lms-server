@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
@@ -26,16 +26,12 @@ const server = http.createServer(app);
 app.use(express.json({ limit: "50mb" }));
 
 //cors => cross origin resource sharing
-app.use(function (req: Request, res: Response, next: NextFunction) {
-  //Enabling CORS
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
-  );
-  next();
-});
+app.use(
+  cors({
+    origin: ["https://m1lky-lms.vercel.app"],
+    credentials: true,
+  })
+);
 //cookie parser
 app.use(cookieParser());
 
