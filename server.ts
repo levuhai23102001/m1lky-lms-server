@@ -28,7 +28,7 @@ app.use(express.json({ limit: "50mb" }));
 //cors => cross origin resource sharing
 app.use(
   cors({
-    origin: ["https://m1lky-lms.vercel.app"],
+    origin: ["http://localhost:3000"],
     credentials: true,
   })
 );
