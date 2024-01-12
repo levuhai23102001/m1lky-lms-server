@@ -68,7 +68,7 @@ app.use(error_1.ErrorMiddleware);
 //connect to socket.oi
 (0, socketServer_1.initSocketServer)(server);
 //connect to server
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}!`);
     connectDB();
