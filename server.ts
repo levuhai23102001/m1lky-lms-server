@@ -26,22 +26,12 @@ const server = http.createServer(app);
 app.use(express.json({ limit: "50mb" }));
 
 //cors => cross origin resource sharing
-
-app.use(function (req, res, next) {
-  //Enabling CORS
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
-  );
+app.use(
   cors({
-    origin: ["https://m1lky-lms.vercel.app/"],
+    origin: ["http://localhost:3000"],
     credentials: true,
-  });
-  next();
-});
-
+  })
+);
 //cookie parser
 app.use(cookieParser());
 
@@ -73,11 +63,11 @@ app.use("/v1/notifications/", notificationRouter);
 app.use("/v1/analytics/", analyticsRouter);
 app.use("/v1/layout/", layoutRouter);
 
-app.get("/v1/", (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response) => {
   return res.send("Express Typescript on Vercel");
 });
 
-app.get("/v1/ping", (req: Request, res: Response) => {
+app.get("/ping", (req: Request, res: Response) => {
   return res.send("pong 🏓");
 });
 
@@ -88,7 +78,7 @@ app.use(ErrorMiddleware);
 initSocketServer(server);
 
 //connect to server
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}!`);
   connectDB();

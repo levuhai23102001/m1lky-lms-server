@@ -25,17 +25,10 @@ const server = http_1.default.createServer(app);
 //body parser
 app.use(express_1.default.json({ limit: "50mb" }));
 //cors => cross origin resource sharing
-app.use(function (req, res, next) {
-    //Enabling CORS
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
-    (0, cors_1.default)({
-        origin: ["https://m1lky-lms.vercel.app/"],
-        credentials: true,
-    });
-    next();
-});
+app.use((0, cors_1.default)({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+}));
 //cookie parser
 app.use((0, cookie_parser_1.default)());
 //connect to mongoose db
@@ -64,10 +57,10 @@ app.use("/v1/orders/", order_route_1.default);
 app.use("/v1/notifications/", notification_route_1.default);
 app.use("/v1/analytics/", analytics_route_1.default);
 app.use("/v1/layout/", layout_route_1.default);
-app.get("/v1/", (req, res) => {
+app.get("/", (req, res) => {
     return res.send("Express Typescript on Vercel");
 });
-app.get("/v1/ping", (req, res) => {
+app.get("/ping", (req, res) => {
     return res.send("pong 🏓");
 });
 //error middleware
@@ -75,7 +68,7 @@ app.use(error_1.ErrorMiddleware);
 //connect to socket.oi
 (0, socketServer_1.initSocketServer)(server);
 //connect to server
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}!`);
     connectDB();
