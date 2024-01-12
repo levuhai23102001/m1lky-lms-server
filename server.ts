@@ -63,11 +63,11 @@ app.use("/v1/notifications/", notificationRouter);
 app.use("/v1/analytics/", analyticsRouter);
 app.use("/v1/layout/", layoutRouter);
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/v1/", (req: Request, res: Response) => {
   return res.send("Express Typescript on Vercel");
 });
 
-app.get("/ping", (req: Request, res: Response) => {
+app.get("/v1/ping", (req: Request, res: Response) => {
   return res.send("pong 🏓");
 });
 

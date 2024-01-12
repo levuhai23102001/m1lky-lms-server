@@ -57,10 +57,10 @@ app.use("/v1/orders/", order_route_1.default);
 app.use("/v1/notifications/", notification_route_1.default);
 app.use("/v1/analytics/", analytics_route_1.default);
 app.use("/v1/layout/", layout_route_1.default);
-app.get("/", (req, res) => {
+app.get("/v1/", (req, res) => {
     return res.send("Express Typescript on Vercel");
 });
-app.get("/ping", (req, res) => {
+app.get("/v1/ping", (req, res) => {
     return res.send("pong 🏓");
 });
 //error middleware
