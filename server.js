@@ -25,10 +25,17 @@ const server = http_1.default.createServer(app);
 //body parser
 app.use(express_1.default.json({ limit: "50mb" }));
 //cors => cross origin resource sharing
-app.use((0, cors_1.default)({
-    origin: "*",
-    credentials: true,
-}));
+app.use(function (req, res, next) {
+    //Enabling CORS
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
+    (0, cors_1.default)({
+        origin: "*",
+        credentials: true,
+    });
+    next();
+});
 //cookie parser
 app.use((0, cookie_parser_1.default)());
 //connect to mongoose db

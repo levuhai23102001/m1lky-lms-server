@@ -26,12 +26,22 @@ const server = http.createServer(app);
 app.use(express.json({ limit: "50mb" }));
 
 //cors => cross origin resource sharing
-app.use(
+
+app.use(function (req, res, next) {
+  //Enabling CORS
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
+  );
   cors({
     origin: "*",
     credentials: true,
-  })
-);
+  });
+  next();
+});
+
 //cookie parser
 app.use(cookieParser());
 
