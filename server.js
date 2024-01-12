@@ -26,7 +26,7 @@ const server = http_1.default.createServer(app);
 app.use(express_1.default.json({ limit: "50mb" }));
 //cors => cross origin resource sharing
 app.use((0, cors_1.default)({
-    origin: ["https://m1lky-lms.vercel.app"],
+    origin: "https://m1lky-lms.vercel.app",
     credentials: true,
 }));
 //cookie parser
