@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
     "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization"
   );
   cors({
-    origin: "*",
+    origin: ["https://m1lky-lms.vercel.app/"],
     credentials: true,
   });
   next();
